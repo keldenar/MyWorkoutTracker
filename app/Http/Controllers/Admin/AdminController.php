@@ -7,6 +7,7 @@ use Validator;
 use Input;
 use Form;
 use Request;
+use roleCheck;
 
 //Models
 use App\Role;
