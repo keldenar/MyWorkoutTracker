@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container col-md-12">
-    @include('adsense')
+
 	<div class="row">
         <div class="col-md-offset-2 col-md-8">
             @section('display')
@@ -14,7 +14,7 @@
             </div>
             @show
         </div>
-
+        @include('adsense')
 	</div>
 </div>
 @endsection

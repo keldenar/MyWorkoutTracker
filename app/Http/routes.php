@@ -19,6 +19,10 @@ Route::get('home', function() {
     return Redirect::to("user");
 });
 
+Route::get('faq', function() {
+   return view('faq');
+});
+
 Route::get('user/{name?}', 'UserController@index');
 
 Route::controllers([

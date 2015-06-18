@@ -1,7 +1,8 @@
-<ul class="nav navbar-nav navbar-right">
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="{{ url('/') }}">Home</a></li>
     @if (Auth::guest())
-        <li><a href="{{ url('/auth/login') }}">Login</a></li>
-        <li><a href="{{ url('/auth/register') }}">Register</a></li>
+        <li role="presentation"><a href="{{ url('/auth/login') }}">Login</a></li>
+        <li role="presentation"><a href="{{ url('/auth/register') }}">Register</a></li>
     @else
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name() }} <span class="caret"></span></a>
