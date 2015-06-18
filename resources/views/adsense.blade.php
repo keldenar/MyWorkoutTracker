@@ -9,7 +9,8 @@
     </script>
 </div> -->
 
-<!--
+    <div class="col-md-2 text-center">
+
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
     <ins class="adsbygoogle"
@@ -19,5 +20,6 @@
     <script>
         (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
--->
-    <div style="width: 300px; height: 600px; margin-bottom: 20px;" class="col-md-2 text-center outlined">BANNER</div>
+    </div>
+
+
