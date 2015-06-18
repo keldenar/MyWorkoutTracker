@@ -4,7 +4,7 @@ use Closure;
 use App\RoleRoute;
 use Auth;
 
-class roleCheck {
+class RoleCheck {
 
 	/**
 	 * Handle an incoming request.
@@ -15,6 +15,7 @@ class roleCheck {
 	 */
 	public function handle($request, Closure $next)
 	{
+
         $route = $request->Route()->getCompiled()->getStaticPrefix();
         $methods = $request->Route()->getMethods();
         $user = Auth::user();
