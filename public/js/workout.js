@@ -114,7 +114,6 @@ function getExercises(value, id, uri){
     });
 }
 
-// TODO get a count of items left and remove the submit button if it's == 0
 function removeExercise(id) {
     $(id).empty();
     count = count - 1;
@@ -138,4 +137,16 @@ function addExercise(uri) {
             }
         }
     });
+}
+var $id = 0;
+function addSelect() {
+    var $prev = "#formgroup_" + $id;
+    $id += 1;
+    var $next = "#formgroup_" + $id;
+    var $clone = $( "#formgroup_0" ).clone();
+    $clone.attr("id", $next);
+    $clone.find("select.form-control").attr("id", "internal_type_id[" + $id +"]");
+    $clone.find("select.form-control").attr("name", "internal_type_id[" + $id +"]");
+    $( $prev ).after($clone);
+
 }

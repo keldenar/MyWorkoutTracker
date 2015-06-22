@@ -7,28 +7,43 @@
     </database-info>
     <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
     <schema name="" catalog="workout"/>
-    <table name="exercise_types" schema="" catalog="workout" type="TABLE">
+    <table name="exercise_categories" schema="" catalog="workout" type="TABLE">
       <column name="id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="created_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn"/>
       <column name="updated_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn"/>
       <column name="name" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
-      <column name="internal_type_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="description" sqlType="TEXT" precision="65535" scale="0" nullable="false" jdbcType="-1"/>
+      <column name="link" sqlType="TEXT" precision="65535" scale="0" nullable="false" jdbcType="-1"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="exercise_types_internal_type_id_foreign" columns="internal_type_id" ref-table="internal_types" ref-schema="" ref-catalog="workout" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <exported-key name="exercises_exercise_type_id_foreign" table="exercises" schema="" catalog="workout" columns="exercise_type_id"/>
-      <index name="exercise_types_name_unique" unique="true" columns="name"/>
-      <index name="exercise_types_internal_type_id_foreign" unique="false" columns="internal_type_id"/>
+      <exported-key name="exercises_exercise_category_id_foreign" table="exercises" schema="" catalog="workout" columns="exercise_category_id"/>
+      <index name="exercise_categories_name_unique" unique="true" columns="name"/>
+    </table>
+    <table name="exercise_value_types" schema="" catalog="workout" type="TABLE">
+      <column name="id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="created_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn"/>
+      <column name="updated_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn"/>
+      <column name="internal_type_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="exercise_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="exercise_value_types_exercise_id_foreign" columns="exercise_id" ref-table="exercises" ref-schema="" ref-catalog="workout" ref-columns="id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <foreign-key name="exercise_value_types_internal_type_id_foreign" columns="internal_type_id" ref-table="internal_types" ref-schema="" ref-catalog="workout" ref-columns="id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <index name="exercise_value_types_exercise_id_foreign" unique="false" columns="exercise_id"/>
+      <index name="exercise_value_types_internal_type_id_foreign" unique="false" columns="internal_type_id"/>
     </table>
     <table name="exercises" schema="" catalog="workout" type="TABLE">
       <column name="id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="created_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn"/>
       <column name="updated_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn"/>
       <column name="name" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
-      <column name="exercise_type_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="exercise_category_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="description" sqlType="TEXT" precision="65535" scale="0" nullable="false" jdbcType="-1"/>
+      <column name="link" sqlType="TEXT" precision="65535" scale="0" nullable="false" jdbcType="-1"/>
+      <column name="video_link" sqlType="TEXT" precision="65535" scale="0" nullable="false" jdbcType="-1"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="exercises_exercise_type_id_foreign" columns="exercise_type_id" ref-table="exercise_types" ref-schema="" ref-catalog="workout" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="exercises_exercise_category_id_foreign" columns="exercise_category_id" ref-table="exercise_categories" ref-schema="" ref-catalog="workout" ref-columns="id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <exported-key name="exercise_value_types_exercise_id_foreign" table="exercise_value_types" schema="" catalog="workout" columns="exercise_id"/>
       <exported-key name="workout_exercises_exercise_id_foreign" table="workout_exercises" schema="" catalog="workout" columns="exercise_id"/>
-      <index name="exercises_exercise_type_id_foreign" unique="false" columns="exercise_type_id"/>
+      <index name="exercises_exercise_category_id_foreign" unique="false" columns="exercise_category_id"/>
     </table>
     <table name="internal_types" schema="" catalog="workout" type="TABLE">
       <column name="id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
@@ -36,7 +51,8 @@
       <column name="updated_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn"/>
       <column name="name" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <exported-key name="exercise_types_internal_type_id_foreign" table="exercise_types" schema="" catalog="workout" columns="internal_type_id"/>
+      <exported-key name="exercise_value_types_internal_type_id_foreign" table="exercise_value_types" schema="" catalog="workout" columns="internal_type_id"/>
+      <exported-key name="workout_exercise_values_internal_type_id_foreign" table="workout_exercise_values" schema="" catalog="workout" columns="internal_type_id"/>
     </table>
     <table name="migrations" schema="" catalog="workout" type="TABLE">
       <column name="migration" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
@@ -57,7 +73,7 @@
       <column name="method" sqlType="ENUM" precision="6" scale="0" nullable="false" jdbcType="1"/>
       <column name="route" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="role_routes_role_id_foreign" columns="role_id" ref-table="roles" ref-schema="" ref-catalog="workout" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="role_routes_role_id_foreign" columns="role_id" ref-table="roles" ref-schema="" ref-catalog="workout" ref-columns="id" update-rule="3" delete-rule="0" deferrability="2"/>
       <index name="role_routes_role_id_foreign" unique="false" columns="role_id"/>
     </table>
     <table name="roles" schema="" catalog="workout" type="TABLE">
@@ -98,16 +114,29 @@
       <index name="users_email_unique" unique="true" columns="email"/>
       <index name="users_link_unique" unique="true" columns="link"/>
     </table>
+    <table name="workout_exercise_values" schema="" catalog="workout" type="TABLE">
+      <column name="id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="created_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn"/>
+      <column name="updated_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn"/>
+      <column name="workout_exercise_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="value" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="internal_type_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="workout_exercise_values_internal_type_id_foreign" columns="internal_type_id" ref-table="internal_types" ref-schema="" ref-catalog="workout" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="workout_exercise_values_workout_exercise_id_foreign" columns="workout_exercise_id" ref-table="workout_exercises" ref-schema="" ref-catalog="workout" ref-columns="id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <index name="workout_exercise_values_internal_type_id_foreign" unique="false" columns="internal_type_id"/>
+      <index name="workout_exercise_values_workout_exercise_id_foreign" unique="false" columns="workout_exercise_id"/>
+    </table>
     <table name="workout_exercises" schema="" catalog="workout" type="TABLE">
       <column name="id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="created_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn"/>
       <column name="updated_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn"/>
       <column name="workout_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="exercise_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="value" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="workout_exercises_exercise_id_foreign" columns="exercise_id" ref-table="exercises" ref-schema="" ref-catalog="workout" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <foreign-key name="workout_exercises_workout_id_foreign" columns="workout_id" ref-table="workouts" ref-schema="" ref-catalog="workout" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="workout_exercises_exercise_id_foreign" columns="exercise_id" ref-table="exercises" ref-schema="" ref-catalog="workout" ref-columns="id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <foreign-key name="workout_exercises_workout_id_foreign" columns="workout_id" ref-table="workouts" ref-schema="" ref-catalog="workout" ref-columns="id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <exported-key name="workout_exercise_values_workout_exercise_id_foreign" table="workout_exercise_values" schema="" catalog="workout" columns="workout_exercise_id"/>
       <index name="workout_exercises_exercise_id_foreign" unique="false" columns="exercise_id"/>
       <index name="workout_exercises_workout_id_foreign" unique="false" columns="workout_id"/>
     </table>

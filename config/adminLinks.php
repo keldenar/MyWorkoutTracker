@@ -6,7 +6,7 @@ return [
         "/admin/roleroutes"=>"Add Role Routes",
         "/admin/userroles"=>"Add User Roles",
         "/admin/userroleedit"=>"Edit Users Roles",
-        "/admin/exercisetypes"=>"Add Exercise Types",
+        "/admin/exercisecategories"=>"Add Exercise Category",
         "/admin/exercises" => "Add Exercises",
     ]
 ];

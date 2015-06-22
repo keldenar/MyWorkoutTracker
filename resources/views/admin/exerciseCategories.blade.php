@@ -14,16 +14,10 @@
                 </ul>
             </div>
         @endif
-        <form class="form-horizontal" method="POST" action="{{ url("/admin/exercisetypes") }}">
+        <form class="form-horizontal" method="POST" action="{{ url("/admin/exercisecategories") }}">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="form-group">
-                <label class="col-md-4 control-label">Internal Type</label>
-                <div class="col-md-6">
-                    {!!  Form::select('internal_id', $internalTypes, null,array("class"=>"form-control")) !!}
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-4 control-label">Exercise Type</label>
+                <label class="col-md-4 control-label">Exercise Category</label>
                 <div class="col-md-6">
                     {!! Form::text('name',null,array("class"=>"form-control")) !!}
                 </div>
@@ -35,23 +29,23 @@
                 </div>
             </div>
         </form>
-        @if (null !== $types)
+        @if (null !== $categories)
             <hr>
             <table class="table">
                 <thead>
                 <tr>
-                    <th>Exercise Type</th>
+                    <th>Exercise Category</th>
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-            @foreach($types as $type)
+            @foreach($categories as $category)
                 <tr>
-                    <td>{{$type->name}}</td>
+                    <td>{{$category->name}}</td>
                     <td>
-                        {!! Form::open(array( 'url'=> url("/admin/exercisetypes"), 'method' => 'POST', 'class'=>'form-horizontal')) !!}
-                        {!! Form::button("Edit", array("class" => "btn btn-success", "onclick" => "showModal('" . url('/admin/exercisetypes/' . $type->id . '/edit') ."' , '#modal')")) !!}
-                        {!! Form::button("Delete", array("class" => "btn btn-danger", "onclick" => "showModal('" . url('/admin/exercisetypes/' . $type->id . '/delete') ."' , '#modal')")) !!}
+                        {!! Form::open(array( 'url'=> url("/admin/exercisecategories"), 'method' => 'POST', 'class'=>'form-horizontal')) !!}
+                        {!! Form::button("Edit", array("class" => "btn btn-success", "onclick" => "showModal('" . url('/admin/exercisecategories/' . $category->id . '/edit') ."' , '#modal')")) !!}
+                        {!! Form::button("Delete", array("class" => "btn btn-danger", "onclick" => "showModal('" . url('/admin/exercisecategories/' . $category->id . '/delete') ."' , '#modal')")) !!}
                         {!! Form::close() !!}
                     </td>
                 </tr>

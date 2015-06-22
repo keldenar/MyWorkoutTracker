@@ -7,7 +7,6 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Administration</div>
                     <div class="panel-body">
-                        <!-- TODO: This section needs to get automated -->
                         @foreach($menus as $route => $title)
                         <div>
                             <a href="{{ url($route) }}">{{ $title }}</a>

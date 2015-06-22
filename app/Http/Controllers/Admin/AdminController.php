@@ -2,6 +2,8 @@
 
 
 // Facades
+use App\ExerciseCategory;
+use App\ExerciseValueType;
 use Auth;
 use Validator;
 use Input;
@@ -128,78 +130,79 @@ class AdminController extends Controller
         return view("admin.roles")->with("roles", $role);
     }
 
-    public function getExercisetypes($id = null, $editType = null)
+    public function getExercisecategories($id = null, $editType = null)
     {
         if (null == $id) {
-            return view("admin.exerciseTypes")->with("types", ExerciseType::all())->with("internalTypes", InternalType::lists("name", "id"));
+            return view("admin.exerciseCategories")->with("categories", ExerciseCategory::all());
         } else {
-            $type = ExerciseType::find($id);
+            $category = ExerciseCategory::find($id);
             if ("edit" == $editType) {
                 return view("admin.editModal")
                     ->with("type", "Edit")
-                    ->with("title", "Exercise Types")
-                    ->with("target", url("/admin/exercisetypes"))
-                    ->with("hiddens", array("id" => $type->id, "type" => "edit"))
-                    ->with("elements", array('Exercise Type' => Form::text('name', $type->name, array('class' => 'form-control')))
+                    ->with("title", "Exercise Categories")
+                    ->with("target", url("/admin/exercisecategories"))
+                    ->with("hiddens", array("id" => $category->id, "type" => "edit"))
+                    ->with("elements", array('Exercise Category' => Form::text('name', $category->name, array('class' => 'form-control')))
                     );
             } elseif ("delete"==$editType)
             {
                 return view("admin.editModal")
                     ->with("type", "Delete")
-                    ->with("title", "Exercise Types")
-                    ->with("target", url("/admin/exercisetypes"))
-                    ->with("hiddens", array("id" => $type->id, "type" => "delete"))
-                    ->with("elements", array('Exercise Type' => Form::text('name', $type->name, array('class' => 'form-control', 'disabled'=>'')))
+                    ->with("title", "Exercise Categories")
+                    ->with("target", url("/admin/exercisecategories"))
+                    ->with("hiddens", array("id" => $category->id, "type" => "delete"))
+                    ->with("elements", array('Exercise Category' => Form::text('name', $category->name, array('class' => 'form-control', 'disabled'=>'')))
                     );
             }
         }
     }
 
-    public function postExercisetypes()
+    public function postExercisecategories()
     {
         if (null == Input::get("id")) {
             $v = Validator::make(Input::all(), [
-                'name' => 'required|unique:exercise_types|min:5|max:255|string',
+                'name' => 'required|unique:exercise_categories|min:5|max:255|string',
             ],[
-                'name.required' => 'The Exercise Types field is required.',
-                'name.unique'   => 'This exercise type is already in the database.',
-                'name.min'      => 'The Exercise Type should be between 5 and 255 characters'
+                'name.required' => 'The Exercise Category field is required.',
+                'name.min'      => 'The Exercise Category should be between 5 and 255 characters'
             ]);
             if ($v->fails()) {
                 return redirect()->back()->withErrors($v->errors())->withInput();
             }
-            $type = new ExerciseType();
-            $type->name = Input::get("name");
-            $type->internal_type_id = Input::get("internal_id");
-            $type->save();
-            return redirect("admin/exercisetypes")->withInput(Input::all());
+            $category = new ExerciseCategory();
+            $category->name = Input::get("name");
+            // TODO add description / links to the form.
+            $category->description = "";
+            $category->link = "";
+
+            $category->save();
+            return redirect("admin/exercisecategories")->withInput(Input::all());
         }
         elseif ("delete" == Input::get("type"))
         {
-            ExerciseType::find(Input::get("id"))->delete();
-            redirect("admin/exercisetypes");
+            ExerciseCategory::find(Input::get("id"))->delete();
+            redirect("admin/exercisecategories");
         }
         elseif ("edit" == Input::get("type"))
         {
-            $type = ExerciseType::find(Input::get("id"));
-            $type->name = Input::get("name");
-            $type->save();
-            redirect("admin/exercisetypes");
+            $category = ExerciseCategory::find(Input::get("id"));
+            $category->name = Input::get("name");
+
+            $category->save();
+            redirect("admin/exercisecategories");
         }
-        return redirect("admin/exercisetypes")->withInput(Input::all());
+        return redirect("admin/exercisecategories")->withInput(Input::all());
     }
 
     public function getExercises($id = null, $editType = null)
     {
         if (null == $id) {
-            return view("admin.exercises")->with("exercises", Exercise::all())->with("formTypes", ExerciseType::lists("name", "id"))->with("types", ExerciseType::all());
+            return view("admin.exercises")->with("exercises", Exercise::all())->with("categories", ExerciseCategory::all())->with("internalType", InternalType::all());
         } else {
             $exercise = Exercise::find($id);
             return $this->getModal($editType, $exercise, 'Exercise', url("/admin/exercises"));
         }
     }
-
-
 
     public function postExercises()
     {
@@ -207,17 +210,26 @@ class AdminController extends Controller
             $v = Validator::make(Input::all(), [
                 'name' => 'required|unique:exercises|min:5|max:255|string',
             ],[
-                'name.required' => 'The Exercise field is required.',
+                'name.required' => 'The exercise field is required.',
                 'name.unique'   => 'This exercise is already in the database.',
-                'name.min'      => 'The Exercise should be between 5 and 255 characters'
+                'name.min'      => 'The exercise should be between 5 and 255 characters'
             ]);
             if ($v->fails()) {
                 return redirect()->back()->withErrors($v->errors())->withInput();
             }
-            $type = new Exercise();
-            $type->name = Input::get("name");
-            $type->exercise_type_id = Input::get("exercise_type_id");
-            $type->save();
+            $exercise = new Exercise();
+            $exercise->name = Input::get("name");
+            $exercise->exercise_category_id = Input::get("exercise_category_id");
+            $exercise->description = "";
+            $exercise->link = "";
+            $exercise->video_link = "";
+            $exercise->save();
+            foreach(Input::get("internal_type_id") as $type_id) {
+                $type = new ExerciseValueType;
+                $type->exercise_id = $exercise->id;
+                $type->internal_type_id = $type_id;
+                $type->save();
+            }
             return redirect("admin/exercises")->withInput(Input::all());
         }
         elseif ("delete" == Input::get("type"))

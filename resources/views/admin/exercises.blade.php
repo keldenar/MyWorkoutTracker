@@ -17,9 +17,9 @@
         <form class="form-horizontal" method="POST" action="{{ url("/admin/exercises") }}">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="form-group">
-                <label class="col-md-4 control-label">Exercise Type</label>
+                <label class="col-md-4 control-label">Exercise Category</label>
                 <div class="col-md-6">
-                    {!!  Form::select('exercise_type_id', $formTypes, null,array("class"=>"form-control")) !!}
+                    {!!  Form::select('exercise_category_id', $categories->lists("name","id"), null,array("class"=>"form-control")) !!}
                 </div>
             </div>
             <div class="form-group">
@@ -28,6 +28,14 @@
                     {!! Form::text('name',null,array("class"=>"form-control")) !!}
                 </div>
             </div>
+            <div class="form-group" id="formgroup_0">
+                <label class="col-md-4 control-label">Value Type</label>
+                <div class="col-md-6">
+                    {!!  Form::select('internal_type_id[0]', $internalType->lists("name","id"), null,array("class"=>"form-control")) !!}
+
+                </div>
+            </div>
+            <a onclick="addSelect();"><span class="glyphicon glyphicon-plus-sign"></span>Add additional Type</a>
             <div class="form-group">
                 <div class="col-md-6 col-md-offset-4">
                     <button type="submit" class="btn btn-primary">Add Exercise</button>
@@ -39,26 +47,34 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>Type</th>
-                    <th>Exercise</th>
-                    <th>Action</th>
+                    <th class="col-md-3">Type</th>
+                    <th class="col-md-3">Exercise</th>
+                    <th class="col-md-3">Values</th>
+                    <th class="col-md-2">Action</th>
                 </tr>
                 </thead>
                 <tbody>
-            @foreach($types as $type)
+            @foreach($categories as $category)
                 <?php $count = 0 ?>
-                @foreach($type->Exercises->sortBy("name") as $exercise)
+                @foreach($category->Exercises->sortBy("name") as $exercise)
                         <tr>
                             @if ($count == 0)
-                                <td rowspan="{{ $type->Exercises->count() }}">
-                                    {{ $type->name }}
+                                <td rowspan="{{ $category->Exercises->count() }}">
+                                    {{ $category->name }}
                                 </td>
                                 <?php $count = $count + 1 ?>
                             @endif
                             <td>
+
                                 {{ $exercise->name }}
                             </td>
                             <td>
+                                @foreach($exercise->exerciseValueTypes as $valueType)
+                                    {{$valueType->internalType->name}}
+                                @endforeach
+                            </td>
+                            <td>
+                                <!-- TODO Edit should handle being able to add descriptions and links and remove / add value types -->
                                 {!! Form::open(array( 'url'=> url("/admin/exercises"), 'method' => 'POST', 'class'=>'form-horizontal')) !!}
                                 {!! Form::button("Edit", array("class" => "btn btn-success", "onclick" => "showModal('" . url('/admin/exercises/' . $exercise->id . '/edit') ."' , '#modal')")) !!}
                                 {!! Form::button("Delete", array("class" => "btn btn-danger", "onclick" => "showModal('" . url('/admin/exercises/' . $exercise->id . '/delete') ."' , '#modal')")) !!}
