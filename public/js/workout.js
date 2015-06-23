@@ -116,7 +116,7 @@ function getExercises(value, id, uri){
 
 function removeExercise(id) {
     $(id).empty();
-    count = count - 1;
+        count = count - 1;
     if (0 == count) {
         $("#submitButtonTr").hide();
     }
@@ -138,6 +138,7 @@ function addExercise(uri) {
         }
     });
 }
+
 var $id = 0;
 function addSelect() {
     var $prev = "#formgroup_" + $id;
@@ -149,4 +150,15 @@ function addSelect() {
     $clone.find("select.form-control").attr("name", "internal_type_id[" + $id +"]");
     $( $prev ).after($clone);
 
+}
+
+function getExerciseValues(value, id, uri){
+    var string = "";
+    get_call({
+        'uri': uri,
+        form_data: $( value ),
+        action : function(data) {
+            $( '#value' + id).html($( $.parseHTML(data) ).filter("#exerciseValueTD").html());
+        }
+    });
 }

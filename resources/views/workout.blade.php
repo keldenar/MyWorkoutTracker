@@ -20,6 +20,11 @@
                                     <span class="glyphicon glyphicon-plus-sign"></span>
                                         Add Exercise
                                     </a>
+                                    <a class="pull-right text-danger" onclick="showModal( '{{ url("/workout/delete/" . $workout->id) }}', '#deleteModal' );">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                        Delete this workout.
+                                    </a>
+                                    <div id="deleteModal"></div>
                                 </div>
                                 {!! Form::open(array('url' => url("/workout/exercise/"), 'method' => 'POST', 'name' => 'exerciseForm', 'id' => 'exerciseForm', 'class' => "form form-horizontal")) !!}
                                 {!! Form::hidden("workout_id", $workout->id) !!}
@@ -30,9 +35,9 @@
                         <table class="col-md-12 table outlined table-hover" id="workoutTable">
                             <tr>
                                 <th class="col-md-1"> </th>
-                                <th class="col-md-3">Type</th>
-                                <th class="col-md-5">Exercise</th>
-                                <td class="col-md-3"> </td>
+                                <th class="col-md-3">Category</th>
+                                <th class="col-md-3">Exercise</th>
+                                <th class="col-md-5">Information</th>
                             </tr>
                             @if(Auth::check())
                                 @if (Auth::user()->id == $workout->user_id)
@@ -43,10 +48,20 @@
                             @endif
                             @foreach($workout->workoutExercises as $workoutExercise)
                                 <tr>
-                                    <td></td>
-                                    <td>{{$workoutExercise->exercise->exerciseType->name }}</td>
+                                    <td>
+                                        @if(Auth::check())
+                                            @if (Auth::user()->id == $workout->user_id)
+
+                                            @endif
+                                        @endif
+                                    </td>
+                                    <td>{{$workoutExercise->exercise->exerciseCategory->name }}</td>
                                     <td>{{ $workoutExercise->exercise->name }}</td>
-                                    <td>{{$workoutExercise->value}}</td>
+                                    <td>
+                                        @foreach($workoutExercise->workoutValues as $workoutValue)
+                                            <p>{{ $workoutValue->internalType->name }}: {{ $workoutValue->value }}</p>
+                                        @endforeach
+                                    </td>
                                 </tr>
                             @endforeach
                         </table>

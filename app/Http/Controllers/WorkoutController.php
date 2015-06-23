@@ -1,10 +1,14 @@
 <?php namespace App\Http\Controllers;
 
 
+use App\Exercise;
+use App\ExerciseCategory;
 use App\ExerciseType;
+use App\ExerciseValueType;
 use App\Workout;
 use App\WorkoutExercise;
 use App\User;
+use App\WorkoutExerciseValue;
 use Auth;
 use Validator;
 use Input;
@@ -53,7 +57,7 @@ class WorkoutController extends Controller
         if (null == $id) {
             return redirect(url("/"));
         } else {
-            return view("workout")->with("workout", Workout::find($id))->with("exerciseTypes", ExerciseType::all());
+            return view("workout")->with("workout", Workout::find($id));
         }
     }
 
@@ -68,56 +72,96 @@ class WorkoutController extends Controller
     {
         if (null == $id){
         } else {
-            $types["0"] = "None";
-            $selectTypes = ExerciseType::lists("name","id");
-            foreach($selectTypes as $typeId => $name) {
-                $types["$typeId"] = $name;
+            $categories["0"] = "None";
+            $selectCategories = ExerciseCategory::lists("name","id");
+            foreach($selectCategories as $categoryId => $name) {
+                $categories["$categoryId"] = $name;
             }
-            return view("exercise.new")->with("id", $id)->with("types",$types);
+            return view("exercise.new")->with("id", $id)->with("categories",$categories);
         }
     }
 
     public function getExerciseselect()
     {
-        // Get the type_id array from the input
-        $type_id = Input::get("type_id");
+        $category_id = Input::get("exercise_category_id");
+        reset($category_id);
+        $id = key($category_id);
 
-        //Reset the array to the begining
-        reset($type_id);
-        // Get the ID for this type element
-        $id = key($type_id);
+        $category = ExerciseCategory::find($category_id[$id]);
+        if (null == $category) {
+            return view("exercise.select")->with("exercises",null)->with("id", $id);
+        }
+        $exercises = $category->Exercises->sortBy("name")->lists("name","id");;
+        $selectExercises["0"] = "None";
+        foreach($exercises as $exerciseId => $name) {
+            $selectExercises["$exerciseId"] = $name;
+        }
 
-        $types = ExerciseType::find($type_id[$id]);
-
-        $inputDesc = ucfirst($types->internalType->name);
-        $exercises = $types->Exercises;
-        return view("exercise.select")->with("exercises",$exercises)->with("inputDesc", $inputDesc)->with("id", $id);
+        return view("exercise.select")->with("exercises",$selectExercises)->with("id", $id);
     }
 
-    private function decodeInputJSON($array)
+    public function getExercisevalues()
     {
-        $return = array();
-        foreach($array as $json => $nill)
-        {
-            $tmp = json_decode($json);
-            array_push($return, $tmp);
+        $exercise_id = Input::get("exercise_id");
+        reset($exercise_id);
+        $id = key($exercise_id);
+        $fields = ExerciseValueType::where("exercise_id","=",$exercise_id[$id])->get();
+        if ($fields->isEmpty()) {
+            return view("exercise.value")->with("id", $id)->with("fields", null);
         }
-        return $return;
+        return view("exercise.value")->with("id", $id)->with("fields", $fields);
     }
 
     public function postExercise()
     {
-        $values = Input::get("value");
+
+        $values = Input::get("value_id");
         $exercises = Input::get("exercise_id");
         $workout_id = Input::get("workout_id");
+        $workout = Workout::find($workout_id);
+        if ($workout->user_id !== Auth::user()->id) {
+            return redirect()->back();
+        }
         foreach($values as $id => $value) {
             $we = new WorkoutExercise();
             $we->workout_id = $workout_id;
-            $we->value = $value;
             $we->exercise_id = $exercises[$id];
             $we->save();
+
+            $exercise = Exercise::find($exercises[$id]);
+            $exercise_value_types = $exercise->exerciseValueTypes->sortBy("id");
+            foreach($exercise_value_types as $index => $value_type) {
+                $wv = new WorkoutExerciseValue();
+                $wv->workout_exercise_id = $we->id;
+                $wv->internal_type_id = $value_type->internal_type_id;
+                $wv->value = $value[$index];
+                $wv->save();
+
+            }
         }
         return redirect()->back();
+    }
+
+    public function getDelete($id) {
+        $workout = Workout::find($id);
+        if ($workout->user_id !== Auth::user()->id) {
+            return;
+        } else {
+            return view("exercise.delete")->with("id",$id)->with("workout", $workout);
+        }
+    }
+
+    public function postDelete()
+    {
+        $id = Input::get("id");
+        $workout = Workout::find($id);
+        $user = $workout->user;
+
+        if ($workout->user_id == Auth::user()->id) {
+            $workout->delete();
+        }
+
+        return redirect("/user/" . $user->link);
     }
 }
 

@@ -6,7 +6,7 @@
                 <span class="glyphicon glyphicon-remove form-control-static"></span>
             </td>
             <td>
-                {!! Form::select("type_id[$id]", $types, null, array("id"=>"exerciseTypes", "class" => "form-control", "onchange"=> "getExercises(this, $id, '" . url("/workout/exerciseselect/") . "')" )) !!}                {!! Form::close() !!}
+                {!! Form::select("exercise_category_id[$id]", $categories, null, array("id"=>"exerciseCategories", "class" => "form-control", "onchange"=> "getExercises(this, $id, '" . url("/workout/exerciseselect/") . "')" )) !!}                {!! Form::close() !!}
             </td>
             <td id="exercise{{$id}}"></td>
             <td id="value{{$id}}"></td>

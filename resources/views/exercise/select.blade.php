@@ -1,9 +1,11 @@
 @section("tr")
         <td id="exerciseSelectTD">
-            {!! Form::select("exercise_id[$id]", $exercises->sortBy("name")->lists("name","id"), null, array("id"=>"exercises", "class" => "form-control")) !!}
+            @if(null !== $exercises)
+                {!! Form::select("exercise_id[$id]", $exercises, null, array("id"=>"exercises", "class" => "form-control", "onchange"=> "getExerciseValues(this, $id, '" . url("/workout/exercisevalues/") . "')")) !!}
+            @endif
         </td>
         <td id="exerciseValueTD">
-            {!! Form::text("value[$id]",null,array("class"=>"form-control" , "placeholder" => $inputDesc)) !!}
+
         </td>
 @show
 
