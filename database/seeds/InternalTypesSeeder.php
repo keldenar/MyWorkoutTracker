@@ -10,8 +10,9 @@ class InternalTypesTableSeeder extends Seeder
     {
         Eloquent::unguard();
         DB::table('internal_types')->delete();
-        InternalType::create([ 'name' => 'laps' ]);
-        InternalType::create([ 'name' => 'reps' ]);
-        InternalType::create([ 'name' => 'time' ]);
+        InternalType::create([ 'name' => 'Laps' ]);
+        InternalType::create([ 'name' => 'Repetitions' ]);
+        InternalType::create([ 'name' => 'Time' ]);
+        InternalType::create([ 'name' => 'Weight' ]);
     }
 }

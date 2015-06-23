@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Exercise Tracker</title>
 
-    <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/workout.css') }}" rel="stylesheet">
 
 	<!-- Fonts -->
@@ -20,7 +20,7 @@
 	<![endif]-->
 </head>
 <body>
-    <div class="header clearfix col-md-8 col-md-offset-2">
+    <div class="header col-md-8 col-md-offset-2">
         <div class="row">
             <div class="col-md-2">
                 <h3 class="text-center">Exercise Tracker</h3>
@@ -37,15 +37,14 @@
 	@yield('content')
 
 
-    <footer class="footer">
-        <div class="container">
+    <footer class="navbar-default navbar-fixed-bottom">
             <div class="row">
                 <div class="col-md-2 col-md-offset-2"><a href="{{ url("faq") }}">FAQs</a></div>
                 <div class="col-md-2 col-md-offset-1"><a href="#">Privacy Policy</a></div>
                 <div class="col-md-2 col-md-offset-1"><a href="#">Suggest an Exercise</a></div>
             </div>
-        </div>
     </footer>
+
 	<!-- Scripts -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="/js/moment/moment.js"></script>
