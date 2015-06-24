@@ -198,5 +198,32 @@ class WorkoutController extends Controller
         return view("exercise.editResponse")->with("workoutExercise", $workoutExercise);
     }
 
+    public function getDeleteexercise($id)
+    {
+        $workoutExercise = WorkoutExercise::find($id);
+        if ($workoutExercise->workout->user_id !== Auth::user()->id)
+            abort(403, 'Unauthorized action.');;
+        $elements["Exercise"] = "<span class='form-control form-control-flat'>" . $workoutExercise->exercise->name . "</span>";
+        foreach($workoutExercise->workoutValues as $workoutValue) {
+            $elements[$workoutValue->InternalType->name] = "<span class='form-control form-control-flat'>" . $workoutValue->value . "</span>";
+        }
+
+        return view("exercise.deleteModal")
+            ->with("type", "Delete")
+            ->with("title", "Exercise")
+            ->with("target", url("/workout/deleteexercise"))
+            ->with("hiddens", array("id" => $id))
+            ->with("elements", $elements)
+            ->with("id",$id);
+    }
+
+    public function postDeleteexercise()
+    {
+        $id = Input::get("id");
+        $workoutExercise = WorkoutExercise::find($id);
+        if ($workoutExercise->workout->user_id !== Auth::user()->id) abort(403, 'Unauthorized action.');
+        $workoutExercise->delete();
+        return;
+    }
 }
 
