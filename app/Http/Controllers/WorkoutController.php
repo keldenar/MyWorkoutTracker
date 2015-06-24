@@ -13,6 +13,7 @@ use Auth;
 use Validator;
 use Input;
 use Carbon\Carbon;
+use Form;
 
 class WorkoutController extends Controller
 {
@@ -163,5 +164,39 @@ class WorkoutController extends Controller
 
         return redirect("/user/" . $user->link);
     }
+
+    public function getEditexercise($id = null)
+    {
+        $workoutExercise = WorkoutExercise::find($id);
+        if ($workoutExercise->workout->user_id !== Auth::user()->id)
+            abort(403, 'Unauthorized action.');;
+        $elements["Exercise"] = "<span class='form-control form-control-flat'>" . $workoutExercise->exercise->name . "</span>";
+        foreach($workoutExercise->workoutValues as $workoutValue) {
+            $elements[$workoutValue->InternalType->name] = Form::text("val[" . $workoutValue->id ."]", $workoutValue->value, array("class" => "form-control"));
+        }
+
+        return view("exercise.editModal")
+            ->with("type", "Edit")
+            ->with("title", "Exercise")
+            ->with("target", url("/workout/editexercise"))
+            ->with("hiddens", array("id" => $id))
+            ->with("elements", $elements)
+            ->with("id",$id);
+    }
+
+
+    public function postEditexercise()
+    {
+        $id = Input::get("id");
+        $workoutExercise = WorkoutExercise::find($id);
+        if ($workoutExercise->workout->user_id !== Auth::user()->id) abort(403, 'Unauthorized action.');
+        foreach(Input::get("val") as $workoutValueId=>$value) {
+            $workoutValue = WorkoutExerciseValue::find($workoutValueId);
+            $workoutValue->value = $value;
+            $workoutValue->save();
+        }
+        return view("exercise.editResponse")->with("workoutExercise", $workoutExercise);
+    }
+
 }
 

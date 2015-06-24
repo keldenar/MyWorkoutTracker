@@ -15,4 +15,9 @@ class WorkoutExercise extends Model {
         return $this->hasMany('App\WorkoutExerciseValue','workout_exercise_id','id');
     }
 
+    public function workout()
+    {
+        return $this->hasOne('App\Workout', 'id', 'workout_id');
+    }
+
 }

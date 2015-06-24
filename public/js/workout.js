@@ -94,6 +94,42 @@ function get_call(payload) {
     });
 }
 
+function post_call(payload) {
+    var form_data;
+
+    if ( payload.form_data ) {
+        form_data = JSON.stringify(payload.form_data.toJSON());
+        form_data = payload.form_data.serialize();
+    }
+    $.ajax({
+        url : payload.uri,
+        type : 'POST',
+        data : form_data,
+        success : function(result) {
+            if ( payload.action ) {
+                payload.action(result);
+            } else {
+                location.reload();
+            }
+        },
+        error : function(result) {
+            text = jQuery.parseJSON(result.responseText);
+
+            if ( payload.alerts ) {
+                payload.alerts.append('<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button>' + text.error + '</div>');
+            } else {
+                $('.text-error').html(text.error);
+                setTimeout(function() {
+                    $('.text-error').html('');
+                }, 3000);
+            }
+
+
+        }
+    });
+}
+
+
 
 
 $('table#workouts > tbody > tr').click(function() {
