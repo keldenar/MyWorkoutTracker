@@ -42,8 +42,9 @@
             <div class="row">
                 <div class="fb-like col-md-2" data-share="true" data-width="450" data-show-faces="true"></div>
                 <div class="col-md-2"><a href="{{ url("faq") }}">FAQs</a></div>
-                <div class="col-md-2 col-md-offset-1"><a href="#">Privacy Policy</a></div>
-                <div class="col-md-2 col-md-offset-1"><a href="#">Suggest an Exercise</a></div>
+                <div class="col-md-2"><a href="#">Privacy Policy</a></div>
+                <div class="col-md-2"><a href="#">Suggest an Exercise</a></div>
+                <div class="col-md-2"><a href="{{ url("donate") }}">Donate</a></div>
             </div>
     </footer>
 

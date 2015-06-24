@@ -23,6 +23,14 @@ Route::get('faq', function() {
    return view('faq');
 });
 
+Route::get('donate', function() {
+   return view('donate');
+});
+
+Route::get('awesome', function() {
+    return view('awesome');
+});
+
 Route::get('user/{name?}', 'UserController@index');
 
 Route::controllers([
