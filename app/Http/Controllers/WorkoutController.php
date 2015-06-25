@@ -225,5 +225,39 @@ class WorkoutController extends Controller
         $workoutExercise->delete();
         return;
     }
+
+    public function getClone($id)
+    {
+        if (false == Auth::check()) {
+            abort(403, 'Unauthorized action.');
+        }
+        return view("exercise.cloneModal")->with("workout", Workout::find($id));
+    }
+
+    public function postClone() {
+        if (false == Auth::check()) {
+            abort(403, 'Unauthorized action.');
+        }
+        $workout = Workout::find(Input::get("id"));
+        $new = new Workout();
+        $new->name = $workout->name;
+        $new->workout_date = date('Y-m-d H:i:s');
+        $new->user_id = Auth::user()->id;
+        $new->save();
+        foreach($workout->workoutExercises as $exercise) {
+            $ne = new WorkoutExercise;
+            $ne->workout_id = $new->id;
+            $ne->exercise_id = $exercise->exercise_id;
+            $ne->save();
+            foreach($exercise->workoutValues as $value) {
+                $wv = new WorkoutExerciseValue;
+                $wv->workout_exercise_id = $ne->id;
+                $wv->internal_type_id = $value->internal_type_id;
+                $wv->value = $value->value;
+                $wv->save();
+            }
+        }
+        return redirect()->back();
+    }
 }
 

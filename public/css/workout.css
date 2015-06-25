@@ -66,5 +66,9 @@ a {
 
 .form-control-flat {
     border: hidden;
-    box-shadow: 0px 1px 1px #fff; !important;
+    box-shadow: 0px 1px 1px #fff !important;
+}
+
+.btn-clone {
+    padding: 2px 12px !important;
 }

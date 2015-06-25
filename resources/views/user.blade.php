@@ -17,12 +17,17 @@
                         @if(null !== $workouts)
                             <table id="workouts" class="table table-hover" style="margin-top: 10px">
                                 <tr>
-                                    <th class="col-md-3">Date</th><th class="col-md-8">Workout</th>
+                                    <th class="col-md-3">Date</th><th class="col-md-8">Workout</th><th></th>
                                 </tr>
                                 @foreach($workouts as $workout)
                                     <tr>
                                         <td><a href="{{url("/workout/edit/" . $workout->id)}}">{{ $workout->workout_date }}</a></td>
                                         <td><a href="{{url("/workout/edit/" . $workout->id)}}">{{ $workout->name }}</a></td>
+                                        <td>
+                                            @if(Auth::check())
+                                                <button class="btn btn-default btn-clone" onclick="showModal( '{{ url('/workout/clone/') . '/' . $workout->id }}', '#modal')">Clone</button>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                             </table>
@@ -30,7 +35,5 @@
 				    </div>
                 @endif
 			</div>
-
-
 <div id="modal"> </div>
 @endsection

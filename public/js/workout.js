@@ -131,12 +131,13 @@ function post_call(payload) {
 
 
 
-
+/*
 $('table#workouts > tbody > tr').click(function() {
     var link;
     link = $(this).children("td").children("a").attr("href");
     window.location = link;
 });
+*/
 
 function getExercises(value, id, uri){
     var string = "";
@@ -214,3 +215,8 @@ window.fbAsyncInit = function() {
     js.src = "//connect.facebook.net/en_US/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
+
+function clone(id) {
+
+
+}
