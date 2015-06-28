@@ -8,5 +8,6 @@ return [
         "/admin/userroleedit"=>"Edit Users Roles",
         "/admin/exercisecategories"=>"Add Exercise Category",
         "/admin/exercises" => "Add Exercises",
+        "/admin/internaltypes" => "Add Internal Type",
     ]
 ];

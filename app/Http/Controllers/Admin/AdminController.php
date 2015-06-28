@@ -264,6 +264,51 @@ class AdminController extends Controller
             );
 
     }
+
+    public function getInternaltypes($id = null, $editType=null)
+    {
+        if (null == $id) {
+            return view("admin.internalTypes")->with("internalType", InternalType::all());
+        } else {
+            $internalType = InternalType::find($id);
+            return $this->getModal($editType, $internalType, 'Internal Type', url("/admin/internaltypes"));
+        }
+    }
+
+    public function postInternaltypes()
+    {
+        if (null == Input::get("id")) {
+            $v = Validator::make(Input::all(), [
+                'name' => 'required|unique:internal_types|min:5|max:255|string',
+            ],[
+                'name.required' => 'The Internal Type field is required.',
+                'name.min'      => 'The Internal Type should be between 5 and 255 characters'
+            ]);
+            if ($v->fails()) {
+                return redirect()->back()->withErrors($v->errors())->withInput();
+            }
+            $type = new InternalType();
+            $type->name = Input::get("name");
+
+            $type->save();
+            return redirect("admin/internaltypes")->withInput(Input::all());
+        }
+        elseif ("delete" == Input::get("type"))
+        {
+            InternalType::find(Input::get("id"))->delete();
+            redirect("admin/internaltypes");
+        }
+        elseif ("edit" == Input::get("type"))
+        {
+            $type = InternalType::find(Input::get("id"));
+            $type->name = Input::get("name");
+
+            $type->save();
+            redirect("admin/internaltypes");
+        }
+        return redirect("admin/internaltypes")->withInput(Input::all());
+    }
+
 }
 
 
