@@ -2,7 +2,7 @@
 
 @section("adminContent")
 <div class="panel panel-default">
-    <div class="panel-heading">Role Admin</div>
+    <div class="panel-heading">Exercise Admin</div>
     <div class="panel-body">
         @if (count($errors) > 0)
             <div class="alert alert-danger">
