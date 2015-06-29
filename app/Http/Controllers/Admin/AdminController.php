@@ -161,10 +161,10 @@ class AdminController extends Controller
     {
         if (null == Input::get("id")) {
             $v = Validator::make(Input::all(), [
-                'name' => 'required|unique:exercise_categories|min:5|max:255|string',
+                'name' => 'required|unique:exercise_categories|min:4|max:255|string',
             ],[
                 'name.required' => 'The Exercise Category field is required.',
-                'name.min'      => 'The Exercise Category should be between 5 and 255 characters'
+                'name.min'      => 'The Exercise Category should be between 4 and 255 characters'
             ]);
             if ($v->fails()) {
                 return redirect()->back()->withErrors($v->errors())->withInput();
