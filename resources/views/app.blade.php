@@ -35,7 +35,9 @@
 
     <footer class="navbar-default navbar-fixed-bottom">
             <div class="row text-center">
-                <div class="fb-like col-md-2" data-share="true" data-width="450" data-show-faces="true"></div>
+                @if (Config::get("app.debug") == false)
+                    <div class="fb-like col-md-2" data-share="true" data-width="450" data-show-faces="true"></div>
+                @endif
                 <div class="col-md-2"><a href="{{ url("faq") }}">FAQs</a></div>
                 <div class="col-md-2"><a href="#">Privacy Policy</a></div>
                 @if (Auth::check())
