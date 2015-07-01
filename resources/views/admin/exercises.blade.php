@@ -28,6 +28,24 @@
                     {!! Form::text('name',null,array("class"=>"form-control")) !!}
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Description</label>
+                <div class="col-md-6">
+                    {!! Form::text('description',null,array("class"=>"form-control")) !!}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Link</label>
+                <div class="col-md-6">
+                    {!! Form::text('link',null,array("class"=>"form-control")) !!}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Video</label>
+                <div class="col-md-6">
+                    {!! Form::text('video_link',null,array("class"=>"form-control")) !!}
+                </div>
+            </div>
             <div class="form-group" id="formgroup_0">
                 <label class="col-md-4 control-label">Value Type</label>
                 <div class="col-md-6">
@@ -65,8 +83,14 @@
                                 <?php $count = $count + 1 ?>
                             @endif
                             <td>
-
+                                @if ($exercise->description !== "")
+                                    <span title="{{ $exercise->description }}">
+                                @endif
                                 {{ $exercise->name }}
+                                @if ($exercise->description !== "")
+                                    </span>
+                                @endif
+
                             </td>
                             <td>
                                 @foreach($exercise->exerciseValueTypes as $valueType)
@@ -74,7 +98,6 @@
                                 @endforeach
                             </td>
                             <td>
-                                <!-- TODO Edit should handle being able to add descriptions and links and remove / add value types -->
                                 {!! Form::open(array( 'url'=> url("/admin/exercises"), 'method' => 'POST', 'class'=>'form-horizontal')) !!}
                                 {!! Form::button("Edit", array("class" => "btn btn-success", "onclick" => "showModal('" . url('/admin/exercises/' . $exercise->id . '/edit') ."' , '#modal')")) !!}
                                 {!! Form::button("Delete", array("class" => "btn btn-danger", "onclick" => "showModal('" . url('/admin/exercises/' . $exercise->id . '/delete') ."' , '#modal')")) !!}

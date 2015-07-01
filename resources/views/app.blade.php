@@ -34,11 +34,14 @@
 
 
     <footer class="navbar-default navbar-fixed-bottom">
-            <div class="row">
+            <div class="row text-center">
                 <div class="fb-like col-md-2" data-share="true" data-width="450" data-show-faces="true"></div>
                 <div class="col-md-2"><a href="{{ url("faq") }}">FAQs</a></div>
                 <div class="col-md-2"><a href="#">Privacy Policy</a></div>
-                <div class="col-md-2"><a href="#">Suggest an Exercise</a></div>
+                @if (Auth::check())
+                    <div class="col-md-2"><a href="#">Suggest an Exercise</a></div>
+                    <div class="col-md-2"><a href="#">Suggest a Category</a></div>
+                @endif
                 <div class="col-md-2"><a href="{{ url("donate") }}">Donate</a></div>
             </div>
     </footer>

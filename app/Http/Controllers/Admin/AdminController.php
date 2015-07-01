@@ -171,7 +171,6 @@ class AdminController extends Controller
             }
             $category = new ExerciseCategory();
             $category->name = Input::get("name");
-            // TODO add description / links to the form.
             $category->description = "";
             $category->link = "";
 
@@ -200,7 +199,19 @@ class AdminController extends Controller
             return view("admin.exercises")->with("exercises", Exercise::all())->with("categories", ExerciseCategory::all())->with("internalType", InternalType::all());
         } else {
             $exercise = Exercise::find($id);
-            return $this->getModal($editType, $exercise, 'Exercise', url("/admin/exercises"));
+            return view("admin.editModal")
+                ->with("type", ucfirst($editType))
+                ->with("title", "Exercise")
+                ->with("target", url("/admin/exercises"))
+                ->with("hiddens", array("id" => $exercise->id, "type" => $editType))
+                ->with("elements", array(
+                        'Exercise' => Form::text('name', $exercise->name, array('class' => 'form-control')),
+                        'Description' => Form::text('description', $exercise->description, array('class' => 'form-control')),
+                        'Link' => Form::text('link', $exercise->link, array('class' => 'form-control')),
+                        'Video Link' => Form::text('video_link', $exercise->video_link, array('class' => 'form-control')),
+                    )
+                );
+
         }
     }
 
@@ -220,9 +231,9 @@ class AdminController extends Controller
             $exercise = new Exercise();
             $exercise->name = Input::get("name");
             $exercise->exercise_category_id = Input::get("exercise_category_id");
-            $exercise->description = "";
-            $exercise->link = "";
-            $exercise->video_link = "";
+            $exercise->description = Input::has("description") ? Input::get("description") : "";
+            $exercise->link = Input::has("link") ? Input::get("link") : "";
+            $exercise->video_link = Input::has("video_link") ? Input::get("video_link") : "";
             $exercise->save();
             foreach(Input::get("internal_type_id") as $type_id) {
                 $type = new ExerciseValueType;
@@ -239,9 +250,12 @@ class AdminController extends Controller
         }
         elseif ("edit" == Input::get("type"))
         {
-            $type = Exercise::find(Input::get("id"));
-            $type->name = Input::get("name");
-            $type->save();
+            $exercise = Exercise::find(Input::get("id"));
+            $exercise->description = Input::has("description") ? Input::get("description") : "";
+            $exercise->link = Input::has("link") ? Input::get("link") : "";
+            $exercise->video_link = Input::has("video_link") ? Input::get("video_link") : "";
+            $exercise->name = Input::get("name");
+            $exercise->save();
             redirect("admin/exercises");
         }
         return redirect("admin/exercises")->withInput(Input::all());
