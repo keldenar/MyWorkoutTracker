@@ -55,5 +55,4 @@
         @endif
     </div>
 </div>
-    <div id="modal"> </div>
 @endsection

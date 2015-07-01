@@ -32,7 +32,7 @@
 	@yield('content')
 
 
-
+    <div id="modal"> </div>
     <footer class="navbar-default navbar-fixed-bottom">
             <div class="row text-center">
                 @if (Config::get("app.debug") == false)
