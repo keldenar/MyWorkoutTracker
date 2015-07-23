@@ -217,6 +217,16 @@ window.fbAsyncInit = function() {
 }(document, 'script', 'facebook-jssdk'));
 
 function clone(id) {
+}
 
-
+function suggestExercise(uri) {
+    post_call({
+        'uri' : uri,
+        'form_data' : $("#modalform"),
+        'action' : function(data) {
+            $("#modal").modal("hide");
+            $("#modal").replaceWith(data);
+            $("#modal").modal("show");
+        }
+    })
 }

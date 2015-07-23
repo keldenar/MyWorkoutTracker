@@ -50,7 +50,6 @@
                 <label class="col-md-4 control-label">Value Type</label>
                 <div class="col-md-6">
                     {!!  Form::select('internal_type_id[0]', $internalType->lists("name","id"), null,array("class"=>"form-control")) !!}
-
                 </div>
             </div>
             <a onclick="addSelect();"><span class="glyphicon glyphicon-plus-sign"></span>Add additional Type</a>

@@ -33,6 +33,7 @@
 
 
     <div id="modal"> </div>
+    <!-- TODO fix this section so it centers correctly when not logged in. -->
     <footer class="navbar-default navbar-fixed-bottom">
             <div class="row text-center">
                 @if (Config::get("app.debug") == false)
@@ -41,8 +42,8 @@
                 <div class="col-md-2"><a href="{{ url("faq") }}">FAQs</a></div>
                 <div class="col-md-2"><a href="#">Privacy Policy</a></div>
                 @if (Auth::check())
-                    <div class="col-md-2"><a href="#">Suggest an Exercise</a></div>
-                    <div class="col-md-2"><a href="#">Suggest a Category</a></div>
+                    <div class="col-md-2"><a onclick="showModal(' {{ url("/suggest/exercise") }} ','#modal')">Suggest an Exercise</a></div>
+                    <div class="col-md-2"><a onclick="showModal(' {{ url("/suggest/category") }} ','#modal')">Suggest a Category</a></div>
                 @endif
                 <div class="col-md-2"><a href="{{ url("donate") }}">Donate</a></div>
             </div>

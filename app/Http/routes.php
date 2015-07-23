@@ -38,6 +38,7 @@ Route::controllers([
     'admin' => 'Admin\AdminController',
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
+    'suggest' => 'SuggestionController',
     'test' => 'TestController',
 ]);
 
